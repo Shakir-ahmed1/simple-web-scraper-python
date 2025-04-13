@@ -4,6 +4,8 @@ import time
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
+from urllib.parse import urlparse, urlunparse
+
 
 counter = 0
 load_dotenv('.env')
@@ -62,6 +64,17 @@ def extract_links_from_html(html):
     return links
 
 
+
+def normalize_urls(urls):
+    normalized_urls = []
+    for url in urls:
+        parsed = urlparse(url)
+        # Remove the fragment (e.g. #respond)
+        normalized = parsed._replace(fragment="")
+        normalized_urls.append(urlunparse(normalized)) 
+    return normalized_urls
+
+
 def scrape_and_save(url, index):
     global counter
     counter += 1
@@ -87,7 +100,9 @@ def scrape_and_save(url, index):
     with open(file_path, 'r', encoding='utf-8') as f:
         links_local = extract_links_from_html(f.read())
 
-    return links_live + links_local
+    all_links = normalize_urls(links_live + links_local)
+
+    return all_links
 
 
 def store_urls(urls):
