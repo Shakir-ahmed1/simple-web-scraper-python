@@ -65,9 +65,12 @@ def process_html_files(folder_path, output_folder):
     # Create the 'extracted_geez' folder if it doesn't exist
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
-
+    filenames = os.listdir(folder_path)
     # Loop over each HTML file in the provided folder
+    counter = 0
     for filename in os.listdir(folder_path):
+        counter += 1
+        # print(f"{counter}/{len(filenames)}")
         if filename.endswith('.html'):  # Process only HTML files
             file_path = os.path.join(folder_path, filename)
             
@@ -84,6 +87,7 @@ def process_html_files(folder_path, output_folder):
             # Save the extracted text as a .txt file
             with open(output_file_path, 'w', encoding='utf-8') as output_file:
                 output_file.write(extracted_text)
+            
 
     print("Processing complete. Extracted text files are saved in 'extracted_geez' folder.")
 
