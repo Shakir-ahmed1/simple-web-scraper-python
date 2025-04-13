@@ -4,7 +4,8 @@ import time
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlparse, urlunparse, urljoin
+
 
 
 counter = 0
@@ -52,15 +53,15 @@ def get_start_index(found, scraped):
     return len(found)
 
 
+
 def extract_links_from_html(html):
     soup = BeautifulSoup(html, 'html.parser')
     links = []
     for a in soup.find_all('a', href=True):
         href = a['href'].strip()
-        if href.startswith('/'):
-            href = base_url + href[1:]
-        if href.startswith(base_url):
-            links.append(href)
+        full_url = urljoin(base_url, href)
+        if full_url.startswith(base_url):
+            links.append(full_url)
     return links
 
 
