@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
+counter = 0
 load_dotenv('.env')
 #  ... ...፣ .{1,2} .{2,4}፣ \d\d\d\d \(ኤፍ .{1,2} .\)
 project_folder_name = os.getenv("PROJECT_FOLDERNAME")
@@ -62,6 +63,9 @@ def extract_links_from_html(html):
 
 
 def scrape_and_save(url, index):
+    global counter
+    counter += 1
+    print("COUNTER", counter)
     print(f"Scraping: {url}")
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 OPR/106.0.0.0'
