@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
 load_dotenv('.env')
-
+#  ... ...፣ .{1,2} .{2,4}፣ \d\d\d\d \(ኤፍ .{1,2} .\)
 project_folder_name = os.getenv("PROJECT_FOLDERNAME")
 base_url = os.getenv("BASE_URL")
 found_url_file_name = os.path.join(project_folder_name, os.getenv("FOUND_URLS_FILENAME"))
