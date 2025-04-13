@@ -70,7 +70,7 @@ def process_html_files(folder_path, output_folder):
     counter = 0
     for filename in os.listdir(folder_path):
         counter += 1
-        # print(f"{counter}/{len(filenames)}")
+        print(f"{counter}/{len(filenames)}")
         if filename.endswith('.html'):  # Process only HTML files
             file_path = os.path.join(folder_path, filename)
             
