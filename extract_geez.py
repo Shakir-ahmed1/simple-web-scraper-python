@@ -34,7 +34,8 @@ def clean_html(html_content):
 def apply_regex(input_text):
 
     # Regular expression to match sentences with Ethiopian script and punctuation
-    pattern = r'([ሀ-ፖ]+.*[።?|])'
+    pattern = r'(.*[ሀ-ፖ]+.*)'
+    # pattern = r'([ሀ-ፖ]+.*[።?፣፤|])'
 
     # Step 1: Apply the regex to the input text
     matches = re.findall(pattern, input_text)
