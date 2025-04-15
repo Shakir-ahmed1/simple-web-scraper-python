@@ -2,6 +2,8 @@ import os
 import re
 from bs4 import BeautifulSoup
 import dotenv
+import chardet
+
 
 dotenv.load_dotenv('.env')
 
@@ -62,33 +64,47 @@ def clean_html_regex(text):
 
 
 
+def is_text_file(file_path):
+    with open(file_path, 'rb') as f:
+        raw_data = f.read(1024)  # Read first 1KB to guess encoding
+    result = chardet.detect(raw_data)
+    encoding = result['encoding']
+    return encoding
+
 def process_html_files(folder_path, output_folder):
     # Create the 'extracted_geez' folder if it doesn't exist
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
+
     filenames = os.listdir(folder_path)
-    # Loop over each HTML file in the provided folder
     counter = 0
-    for filename in os.listdir(folder_path):
+
+    for filename in filenames:
         counter += 1
         print(f"{counter}/{len(filenames)}")
-        if filename.endswith('.html'):  # Process only HTML files
+
+        if filename.endswith('.html'):
             file_path = os.path.join(folder_path, filename)
-            
-            # Read the content of the HTML file
-            with open(file_path, 'r', encoding='utf-8') as file:
-                html_content = file.read()
 
-            # Apply the clean_html_regex function to the HTML content
-            extracted_text = clean_html_regex(html_content)
+            # Detect encoding
+            encoding = is_text_file(file_path)
+            if not encoding:
+                print(f"Skipping {filename}: Cannot detect encoding or binary file.")
+                continue
 
-            # Create the output text file path (with .txt extension)
-            output_file_path = os.path.join(output_folder, f"{os.path.splitext(filename)[0]}.txt")
+            try:
+                with open(file_path, 'r', encoding=encoding, errors='ignore') as file:
+                    html_content = file.read()
 
-            # Save the extracted text as a .txt file
-            with open(output_file_path, 'w', encoding='utf-8') as output_file:
-                output_file.write(extracted_text)
-            
+                extracted_text = clean_html_regex(html_content)
+
+                output_file_path = os.path.join(output_folder, f"{os.path.splitext(filename)[0]}.txt")
+                with open(output_file_path, 'w', encoding='utf-8') as output_file:
+                    output_file.write(extracted_text)
+
+            except Exception as e:
+                print(f"Error processing {filename}: {e}")
+                continue
 
     print("Processing complete. Extracted text files are saved in 'extracted_geez' folder.")
 
