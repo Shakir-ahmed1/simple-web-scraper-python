@@ -88,12 +88,13 @@ def process_html_files(folder_path, output_folder):
 
             # Detect encoding
             encoding = is_text_file(file_path)
+            print(encoding)
             if not encoding:
                 print(f"Skipping {filename}: Cannot detect encoding or binary file.")
                 continue
 
             try:
-                with open(file_path, 'r', encoding=encoding, errors='ignore') as file:
+                with open(file_path, 'r', encoding='utf-8', errors='ignore') as file:
                     html_content = file.read()
 
                 extracted_text = clean_html_regex(html_content)
